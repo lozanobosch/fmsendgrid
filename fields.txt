@@ -1,0 +1,35 @@
+url:
+https://api.sendgrid.com/v3/mail/send
+----
+key:
+Tu API key
+----
+destinatario:
+destino@example.com
+----
+remitente:
+me@example.com
+----
+asunto:
+Esto es amazing, Folks!
+----
+cuerpo:
+No me creo que sea tan fácil.
+----
+plantilla:
+  X-POST
+--header "Authorization: Bearer {{key}}"
+--header "Content-Type: application/json"
+--data 
+----
+data_tpl:
+{"content":[{"type":"text/plain","value":"{{cuerpo}}"}],"from":{"email":"{{remitente}}","name":""},"personalizations":[{"to":[{"email":"{{destinatario}}","name":""}]}],"reply_to":{"email":"{{remitente}}","name":""},"subject":"{{asunto}}"}
+----
+claves: 
+ Let ( [
+$$__datacURL=Substitute ( $$__data_tpl ;["{{destinatario}}" ; $$__destinatario]; ["{{asunto}}" ; $$__asunto]; ["{{cuerpo}}" ; $$__cuerpo]; ["{{remitente}}" ; $$__remitente] );
+
+$$__cURL= Substitute ( $$__plantilla ; "{{key}}" ; $$__key ) & Quote ($$__datacURL)
+
+]; 0 )
+----
